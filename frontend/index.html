@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open World Racer</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Load Three.js -->
+    <script src="lib/three.min.js"></script>
+    <!-- Load Cannon.js for physics -->
+    <script src="lib/cannon.min.js"></script>
+    <!-- Load Socket.io for multiplayer -->
+    <script src="lib/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div class="loading-container">
+            <h1>Open World Racer</h1>
+            <div class="progress-bar">
+                <div id="progress-bar-fill"></div>
+            </div>
+            <p id="loading-text">Loading game assets...</p>
+        </div>
+    </div>
+    
+    <!-- Game canvas container -->
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+    </div>
+    
+    <!-- Game UI elements -->
+    <div id="game-ui">
+        <!-- Speedometer -->
+        <div id="speedometer">
+            <div id="speed-value">0</div>
+            <div id="speed-unit">km/h</div>
+        </div>
+        
+        <!-- Mini map -->
+        <div id="mini-map-container">
+            <canvas id="mini-map"></canvas>
+            <div id="player-indicator"></div>
+        </div>
+        
+        <!-- Player list -->
+        <div id="player-list">
+            <h3>Players</h3>
+            <ul id="players"></ul>
+        </div>
+        
+        <!-- Chat -->
+        <div id="chat-container">
+            <div id="chat-messages"></div>
+            <div id="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Press Enter to chat...">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vehicle selection screen -->
+    <div id="vehicle-selection">
+        <div class="selection-container">
+            <h2>Choose Your Vehicle</h2>
+            <div class="vehicles-grid">
+                <div class="vehicle-card" data-vehicle="default">
+                    <div class="vehicle-preview default"></div>
+                    <h3>Standard Car</h3>
+                    <div class="vehicle-stats">
+                        <div class="stat-bar">
+                            <span>Speed</span>
+                            <div class="stat-fill" style="width: 60%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Acceleration</span>
+                            <div class="stat-fill" style="width: 65%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Handling</span>
+                            <div class="stat-fill" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vehicle-card" data-vehicle="sports">
+                    <div class="vehicle-preview sports"></div>
+                    <h3>Sports Car</h3>
+                    <div class="vehicle-stats">
+                        <div class="stat-bar">
+                            <span>Speed</span>
+                            <div class="stat-fill" style="width: 90%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Acceleration</span>
+                            <div class="stat-fill" style="width: 85%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Handling</span>
+                            <div class="stat-fill" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vehicle-card" data-vehicle="truck">
+                    <div class="vehicle-preview truck"></div>
+                    <h3>Truck</h3>
+                    <div class="vehicle-stats">
+                        <div class="stat-bar">
+                            <span>Speed</span>
+                            <div class="stat-fill" style="width: 40%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Acceleration</span>
+                            <div class="stat-fill" style="width: 30%;"></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Handling</span>
+                            <div class="stat-fill" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="player-name" placeholder="Enter your name" maxlength="16">
+            </div>
+            <button id="start-game">Start Driving</button>
+        </div>
+    </div>
+    
+    <!-- Game over screen -->
+    <div id="game-over" class="hidden">
+        <div class="game-over-container">
+            <h2>Game Over</h2>
+            <div id="game-stats"></div>
+            <button id="restart-game">Play Again</button>
+        </div>
+    </div>
+    
+    <!-- Load game scripts -->
+    <script src="assets/js/utils/constants.js"></script>
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/renderer.js"></script>
+    <script src="assets/js/physics.js"></script>
+    <script src="assets/js/vehicle.js"></script>
+    <script src="assets/js/world.js"></script>
+    <script src="assets/js/multiplayer.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/audio.js"></script>
+    <script src="assets/js/game.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
