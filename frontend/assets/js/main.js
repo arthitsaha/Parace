@@ -6,10 +6,10 @@
 // Set up global game instance
 let game = null;
 
+// Loading manager
+let loadingManager = null;
+
 // DOM Elements
-const loadingScreen = document.getElementById('loading-screen');
-const progressBarFill = document.getElementById('progress-bar-fill');
-const loadingText = document.getElementById('loading-text');
 const vehicleSelection = document.getElementById('vehicle-selection');
 const vehicleCards = document.querySelectorAll('.vehicle-card');
 const playerNameInput = document.getElementById('player-name');
@@ -26,6 +26,10 @@ let playerId = generateUUID();
  * Initialize the application
  */
 function init() {
+    // Initialize the loading manager
+    loadingManager = new LoadingManager();
+    
+    // Set up event listeners
     setupEventListeners();
     
     // If player has previously played, try to load their name and vehicle
@@ -40,6 +44,23 @@ function init() {
     } else {
         selectVehicle('default');
     }
+    
+    // Start loading resources immediately in the background
+    // This way resources are already loading while the player is on the vehicle selection screen
+    startPreloading();
+}
+
+/**
+ * Start preloading resources while on the vehicle selection screen
+ */
+function startPreloading() {
+    // Set completion callback
+    loadingManager.setCompletionCallback(() => {
+        console.log('Preloading complete!');
+    });
+    
+    // Start loading process
+    loadingManager.startLoading();
 }
 
 /**
@@ -67,12 +88,19 @@ function setupEventListeners() {
         localStorage.setItem('playerName', playerName);
         localStorage.setItem('selectedVehicle', selectedVehicle);
         
-        // Hide vehicle selection and start loading the game
+        // Hide vehicle selection and show loading screen
         vehicleSelection.style.display = 'none';
-        loadingScreen.style.display = 'flex';
         
-        // Start the game loading process
-        loadGame();
+        // Check if resources are already loaded
+        if (loadingManager.loadedAssets >= loadingManager.totalAssets) {
+            // Resources already loaded, start game immediately
+            startGame();
+        } else {
+            // Set up callback to start game when loading completes
+            loadingManager.setCompletionCallback(() => {
+                startGame();
+            });
+        }
     });
     
     // Restart game button
@@ -104,27 +132,14 @@ function selectVehicle(vehicle) {
 }
 
 /**
- * Load game assets and initialize the game
+ * Start the game after assets are loaded
  */
-function loadGame() {
+function startGame() {
     // Create new game instance
     game = new Game();
     
-    // Set up loading progress tracking
-    game.onLoadProgress = (progress, message) => {
-        progressBarFill.style.width = `${progress * 100}%`;
-        loadingText.textContent = message;
-    };
-    
     // When game is fully loaded and ready
     game.onReady = () => {
-        // Hide loading screen with a fade out effect
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            loadingScreen.style.opacity = '1';
-        }, 500);
-        
         // Start the game
         game.start({
             playerId: playerId,
